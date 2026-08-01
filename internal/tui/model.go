@@ -49,6 +49,8 @@ var tuiOpenBrowserFn = func(url string) error {
 	case "darwin":
 		cmd = execCommandFn("open", url)
 	case "windows":
+		case "android":
+			cmd = execCommandFn("termux-open-url", url)
 		cmd = execCommandFn("rundll32", "url.dll,FileProtocolHandler", url)
 	default:
 		cmd = execCommandFn("xdg-open", url)
@@ -4069,6 +4071,8 @@ func openBrowserCmd(url string) tea.Cmd {
 		case "darwin":
 			cmd = execCommandFn("open", url)
 		case "windows":
+		case "android":
+			cmd = execCommandFn("termux-open-url", url)
 			cmd = execCommandFn("rundll32", "url.dll,FileProtocolHandler", url)
 		default:
 			cmd = execCommandFn("xdg-open", url)
