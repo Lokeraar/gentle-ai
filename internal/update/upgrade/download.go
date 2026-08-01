@@ -84,6 +84,9 @@ var (
 // This function is not called on Windows — callers (strategy.go) gate it via
 // platform check and return a manual fallback error instead.
 func Download(ctx context.Context, r update.UpdateResult, profile system.PlatformProfile) error {
+	if profile.OS == "android" {
+		profile.OS = "linux"
+	}
 	if profile.OS == "windows" {
 		hint := r.UpdateHint
 		if hint == "" {

@@ -162,6 +162,9 @@ func DownloadLatestBinary(profile system.PlatformProfile, isBeta bool) (string, 
 
 	// 2. Determine binary name and archive URL.
 	goos := profile.OS
+	if goos == "android" {
+		goos = "linux"
+	}
 	goarch := normalizeArch(runtime.GOARCH)
 	assetURL := engramAssetURL(engramGitHubBaseURL, version, goos, goarch)
 	archiveName := engramArchiveName(version, goos, goarch)
@@ -652,6 +655,13 @@ func stopEngramProcesses() error {
 //   - Linux/macOS: /usr/local/bin (fallback: ~/.local/bin if not writable)
 //   - Windows: %LOCALAPPDATA%\engram\bin
 func engramInstallDir(goos string) string {
+	if goos == "android" {
+		prefix := os.Getenv("PREFIX")
+		if prefix != "" {
+			return filepath.Join(prefix, "bin")
+		}
+		return "/data/data/com.termux/files/usr/bin"
+	}
 	if goos == "windows" {
 		localAppData := os.Getenv("LOCALAPPDATA")
 		if localAppData == "" {
